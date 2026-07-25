@@ -15,7 +15,7 @@ export const CreateShowtimeForm = () => {
                 <select {...register('movieId')} className="border">
                     <option value="">--</option>
                     {
-                        (data ?? []).map(movie => (
+                        (data?.movies ?? []).map(movie => (
                             <option key={movie.id} value={movie.id}>{movie.title}</option>
                         ))
                     }

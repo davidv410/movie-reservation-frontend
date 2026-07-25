@@ -2,9 +2,9 @@ import { api } from '@/lib/axios';
 import type {Report, Movie, Genre } from './types.ts';
 import type {CreateMovieFormData, EditMovieFormData} from "@/features/movies/schema.ts";
 
-export const fetchMovies = async () => {
-    const { data } = await api.get<{ movies: Movie[] }>('/movies')
-    return data.movies
+export const fetchMovies = async (page?: string, limit?:string) => {
+    const { data } = await api.get<{ movies: Movie[], pages: number[] }>('/movies', { params: { page, limit } })
+    return data
 }
 
 export const fetchMovie = async (id: string) => {

@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchMovies } from "@/features/movies/api.ts";
 
-export const useMovies = () => {
+export const useMovies = (page?: string, limit?: string) => {
     return useQuery({
-        queryKey: ['movies'],
-        queryFn: fetchMovies
+        queryKey: ['movies', page, limit],
+        queryFn: () => fetchMovies(page, limit)
     })
 }

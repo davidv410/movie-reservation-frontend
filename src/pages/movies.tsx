@@ -1,25 +1,29 @@
 import { useMovies } from "@/features/movies/hooks/useMovies.ts";
 import { useNavigate } from "react-router-dom";
+import {useState} from "react";
 
 export const Movies = () => {
     const navigate = useNavigate()
 
+    const [page, setPage] = useState<string>('1')
+    const [limit, setLimit] = useState<string>('5')
 
-    const { data, isLoading, error } = useMovies()
+    const { data, isLoading, error } = useMovies(page, limit)
 
     if (isLoading) return <p>Loading...</p>
     if (error) return <p>{error.message}</p>
 
     return(
         <>
-            <section className="flex">
+            <section>
+            <div className="flex flex-wrap w-full justify-center">
             {
-                (data ?? []).map(movie => (
+                (data?.movies ?? []).map(movie => (
                     <div key={movie.id} className="
                     m-10
                     p-2
                     border
-                    w-100
+                    w-80
                     ">
                         <p>{movie.title}</p>
                         <p>{movie.description} desc</p>
@@ -30,6 +34,15 @@ export const Movies = () => {
                     </div>
                 ))
             }
+
+            </div>
+            <div className="w-full flex justify-center">
+                {(data?.pages ?? []).map(page => (
+                    <ul>
+                        <li className="m-3 cursor-pointer w-2" onClick={() => setPage(String(page))}>{page}</li>
+                    </ul>
+                ))}
+            </div>
             </section>
         </>
     )
