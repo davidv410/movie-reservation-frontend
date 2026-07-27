@@ -1,17 +1,20 @@
 import { useMovies } from "@/features/movies/hooks/useMovies.ts";
-import { useNavigate } from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import React, {useState} from "react";
 
 export const Movies = () => {
     const navigate = useNavigate()
 
-    const [page, setPage] = useState<string>('1')
-    const [limit, setLimit] = useState<string>('5')
-    const [searchPlaceholder, setSearchPlaceholder] = useState<string | undefined>('')
-    const [search, setSearch] = useState<string | undefined>('')
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    const page = searchParams.get('page') ?? '1'
+    const limit = searchParams.get('limit') ?? '5'
+    const search = searchParams.get('search') ?? ''
+
+    const [searchInput, setSearchInput] = useState<string>('')
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchPlaceholder(e.target.value)
+        setSearchInput(e.target.value)
     }
 
     const { data, isLoading, error } = useMovies(page, limit, search)
@@ -24,7 +27,7 @@ export const Movies = () => {
             <section>
                 <div>
                     <input className="border" placeholder="search..." onChange={handleInput}></input>
-                    <button className="border cursor-pointer" onClick={() => setSearch(searchPlaceholder)}>POVECALO :D</button>
+                    <button className="border cursor-pointer" onClick={() => setSearchParams({ page: '1', limit, search: searchInput })}>POVECALO :D</button>
                 </div>
 
             <div className="flex flex-wrap w-full justify-center">
@@ -48,9 +51,9 @@ export const Movies = () => {
 
             </div>
             <div className="w-full flex justify-center">
-                {(data?.pages ?? []).map(page => (
+                {(data?.pages ?? []).map(p => (
                     <ul>
-                        <li className="m-3 cursor-pointer w-2" onClick={() => setPage(String(page))}>{page}</li>
+                        <li className="m-3 cursor-pointer w-2" onClick={() => setSearchParams({ page: String(p), limit, search })}>{p}</li>
                     </ul>
                 ))}
             </div>
