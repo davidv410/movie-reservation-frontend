@@ -17,6 +17,12 @@ export const Movies = () => {
         setSearchInput(e.target.value)
     }
 
+    const [limitSelect, setLimitSelect] = useState<string>('5')
+
+    const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setLimitSelect(e.target.value)
+    }
+
     const { data, isLoading, error } = useMovies(page, limit, search)
 
     if (isLoading) return <p>Loading...</p>
@@ -27,7 +33,14 @@ export const Movies = () => {
             <section>
                 <div>
                     <input className="border" placeholder="search..." onChange={handleInput}></input>
-                    <button className="border cursor-pointer" onClick={() => setSearchParams({ page: '1', limit, search: searchInput })}>POVECALO :D</button>
+                    <button className="border cursor-pointer" onClick={() => setSearchParams({ page: '1', limit: limitSelect, search: searchInput })}>POVECALO :D</button>
+                    <select className="border w-10 cursor-pointer ml-4" value={limitSelect} onChange={handleSelect}>
+                        <option disabled={true}>Change limit</option>
+                        <option>5</option>
+                        <option>10</option>
+                        <option>15</option>
+                        <option>20</option>
+                    </select>
                 </div>
 
             <div className="flex flex-wrap w-full justify-center">
