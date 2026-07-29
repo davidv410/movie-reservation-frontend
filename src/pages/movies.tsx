@@ -1,6 +1,7 @@
 import { useMovies } from "@/features/movies/hooks/useMovies.ts";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import React, {useState} from "react";
+import {useGenres} from "@/features/movies/hooks/useGenres.ts";
 
 export const Movies = () => {
     const navigate = useNavigate()
@@ -10,6 +11,7 @@ export const Movies = () => {
     const page = searchParams.get('page') ?? '1'
     const limit = searchParams.get('limit') ?? '5'
     const search = searchParams.get('search') ?? ''
+    const genre = searchParams.getAll('genre') ?? []
 
     const [searchInput, setSearchInput] = useState<string>('')
 
@@ -23,7 +25,19 @@ export const Movies = () => {
         setLimitSelect(e.target.value)
     }
 
-    const { data, isLoading, error } = useMovies(page, limit, search)
+    const [genresArr, setGenresArr] = useState<string[]>([])
+
+    const addGenres = (id: string) => {
+        if(genresArr.includes(id)){
+            setGenresArr(prev => prev.filter(g => g !== id))
+        }else{
+            setGenresArr(prev => [...prev, id])
+        }
+    }
+
+
+    const { data, isLoading, error } = useMovies(page, limit, search, genre)
+    const { data: genresList } = useGenres()
 
     if (isLoading) return <p>Loading...</p>
     if (error) return <p>{error.message}</p>
@@ -32,8 +46,8 @@ export const Movies = () => {
         <>
             <section>
                 <div>
-                    <input className="border" placeholder="search..." onChange={handleInput}></input>
-                    <button className="border cursor-pointer" onClick={() => setSearchParams({ page: '1', limit: limitSelect, search: searchInput })}>POVECALO :D</button>
+                    <input className="border" placeholder="search..." onChange={handleInput} value={searchInput}></input>
+                    <button className="border cursor-pointer" onClick={() => setSearchParams({ page: '1', limit: limitSelect, search: searchInput, genre: genresArr })}>POVECALO :D</button>
                     <select className="border w-10 cursor-pointer ml-4" value={limitSelect} onChange={handleSelect}>
                         <option disabled={true}>Change limit</option>
                         <option>5</option>
@@ -41,6 +55,12 @@ export const Movies = () => {
                         <option>15</option>
                         <option>20</option>
                     </select>
+                    <div>
+                        { (genresList ?? []).map(g => (
+                            <button className={`border m-1 cursor-pointer ${genresArr.includes(g.id) ? 'text-red-500' : ''}`} onClick={() => addGenres(g.id)}>{g.name}</button>
+                        )) }
+                        <button className="border cursor-pointer text-green-500" onClick={() => setSearchParams({ page: '1', limit: limitSelect, search: searchInput, genre: genresArr })}>APPLY FILTER</button>
+                    </div>
                 </div>
 
             <div className="flex flex-wrap w-full justify-center">
@@ -66,7 +86,7 @@ export const Movies = () => {
             <div className="w-full flex justify-center">
                 {(data?.pages ?? []).map(p => (
                     <ul>
-                        <li className="m-3 cursor-pointer w-2" onClick={() => setSearchParams({ page: String(p), limit, search })}>{p}</li>
+                        <li className="m-3 cursor-pointer w-2" onClick={() => setSearchParams({ page: String(p), limit: limitSelect, search: searchInput, genre: genresArr })}>{p}</li>
                     </ul>
                 ))}
             </div>
