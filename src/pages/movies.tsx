@@ -2,6 +2,7 @@ import { useMovies } from "@/features/movies/hooks/useMovies.ts";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import React, {useState} from "react";
 import {useGenres} from "@/features/movies/hooks/useGenres.ts";
+import { Header } from "@/components/Header";
 
 export const Movies = () => {
     const navigate = useNavigate()
@@ -44,6 +45,7 @@ export const Movies = () => {
 
     return(
         <>
+            <Header/>
             <section>
                 <div>
                     <input className="border" placeholder="search..." onChange={handleInput} value={searchInput}></input>

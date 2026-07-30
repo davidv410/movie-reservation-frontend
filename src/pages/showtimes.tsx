@@ -2,6 +2,7 @@ import {useShowtimes} from "@/features/showtimes/hooks/useShowtimes.ts";
 import {useNavigate} from "react-router-dom";
 import {useRemoveShowtime} from "@/features/showtimes/hooks/useRemoveShowtime.ts";
 import { useAuth } from "@/features/auth/context.tsx";
+import { Header } from "@/components/Header";
 
 export const Showtimes = () => {
     const navigate = useNavigate()
@@ -17,6 +18,7 @@ export const Showtimes = () => {
 
     return(
         <>
+        <Header/>
             {
                (data ?? []).map(item => (
                    <div key={item.showtimes.id} className="border m-10 flex flex-col items-start">

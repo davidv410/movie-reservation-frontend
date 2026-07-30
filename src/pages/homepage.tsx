@@ -1,14 +1,11 @@
-import { useAuth } from "@/features/auth/context.tsx";
-import { logoutUser } from "@/features/auth/api.ts";
-import {useNavigate} from "react-router-dom";
+import { useAuth } from "@/features/auth/context";
 import {CreateMovieForm} from "@/features/movies/components/CreateMovieForm.tsx";
 import {useState} from "react";
 import {CreateShowtimeForm} from "@/features/showtimes/components/CreateShowtimeForm.tsx"
+import { Header } from "@/components/Header";
 
 export const Homepage = () => {
-    const { user, logout } = useAuth()
-
-    const navigate = useNavigate()
+    const { user } = useAuth()
 
     const [movieForm, setMovieForm] = useState(false)
     const [showtimeForm, setShowtimeForm] = useState(false)
@@ -21,28 +18,9 @@ export const Homepage = () => {
         setShowtimeForm(!showtimeForm)
     }
 
-    const handleLogout = async () => {
-        await logoutUser()
-        logout()
-        navigate("/login")
-    }
-
     return(
         <>
-            { user &&
-                <div>
-                    <p>{user.role} - {user.email}</p>
-                    <button onClick={() => handleLogout()} className="text-red-500">Logout</button>
-                </div>
-            }
-
-            <ul>
-                { user &&
-                <li><button className="cursor-pointer border" onClick={() => navigate('/reservations')}>reservations</button></li>
-                }
-                <li><button className="cursor-pointer border" onClick={() => navigate('/movies')}>movies</button></li>
-                <li><button className="cursor-pointer border" onClick={() => navigate('/showtimes')}>showtimes</button></li>
-            </ul>
+            <Header/>
 
             { user?.role === "admin" &&
                 <>

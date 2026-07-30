@@ -1,6 +1,7 @@
 import {useReservation} from "@/features/reservations/hooks/useReservation.ts";
 import {useCancelReservation} from "@/features/reservations/hooks/useCancelReservation.ts";
 import {useAuth} from "@/features/auth/context.tsx";
+import { Header } from "@/components/Header";
 
 export const Reservations = () => {
 
@@ -15,6 +16,7 @@ export const Reservations = () => {
 
     return(
         <>
+        <Header/>
 
             <p>{ user?.role === 'admin' ? "ALL RESERVATIONS" : "YOUR RESERVATIONS" }</p>
 
