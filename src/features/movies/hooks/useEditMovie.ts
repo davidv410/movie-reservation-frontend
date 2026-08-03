@@ -7,14 +7,14 @@ import {updateMovie} from "@/features/movies/api.ts";
 import {useQueryClient} from "@tanstack/react-query";
 import {useEffect, useState} from "react";
 
-export const useEditMovie = (movie: Movie) => {
+export const useEditMovie = (movie: Movie, genreIds: string[]) => {
     const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<EditMovieFormData>({
         resolver: zodResolver(editMovieSchema),
         defaultValues: {
             title: movie.title,
             description: movie.description ?? '',
             durationMinutes: movie.durationMinutes,
-            genreIds: movie.genreIds ?? []
+            genreIds: genreIds ?? []
         }
     })
 
@@ -23,7 +23,7 @@ export const useEditMovie = (movie: Movie) => {
             title: movie.title,
             description: movie.description ?? '',
             durationMinutes: movie.durationMinutes,
-            genreIds: movie.genreIds ?? []
+            genreIds: genreIds ?? []
         })
     }, [movie])
 

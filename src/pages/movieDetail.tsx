@@ -25,9 +25,12 @@ export const MovieDetail = () => {
         setForm(!form);
     }
 
+    
     if (!movieData) return <p>Movie not found</p>
     if (isLoading || movieLoading) return <p>Loading...</p>
     if (error || movieError) return <p>Error...</p>
+    
+    const genreIds = movieData.map(row => row.movie_genres.genreId)
 
     return (
         <>
@@ -55,7 +58,7 @@ export const MovieDetail = () => {
                     <br/>
 
                     {form &&
-                        <EditMovieForm movie={movieData[0].movies}/>
+                        <EditMovieForm movie={movieData[0].movies} genreIds={genreIds}/>
                     }
 
                 </div>

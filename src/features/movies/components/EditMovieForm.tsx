@@ -2,9 +2,9 @@ import type {Movie} from '@/features/movies/types.ts'
 import {useEditMovie} from "@/features/movies/hooks/useEditMovie.ts";
 import {useGenres} from "@/features/movies/hooks/useGenres.ts";
 
-export const EditMovieForm = ({ movie }: { movie: Movie }) => {
+export const EditMovieForm = ({ movie, genreIds }: { movie: Movie; genreIds: string[] }) => {
 
-    const { register, handleSubmit, submitForm, isSubmitting, successMessage } = useEditMovie(movie)
+    const { register, handleSubmit, submitForm, isSubmitting, successMessage } = useEditMovie(movie, genreIds)
 
     const { data, isLoading, error } = useGenres()
 
