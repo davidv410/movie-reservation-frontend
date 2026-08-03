@@ -23,7 +23,7 @@ export type Genre = {
 
 export type MovieWithGenre = {
     movies: Movie,
-    movie_genre: {
+    movie_genres: {
         movieId: string;
         genreId: string;
     }

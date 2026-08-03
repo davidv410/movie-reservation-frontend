@@ -1,4 +1,4 @@
-import {useShowtimes} from "@/features/showtimes/hooks/useShowtimes.ts";
+import {useShowtime} from "@/features/showtimes/hooks/useShowtime.ts";
 import {useParams} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "@/features/auth/context.tsx";
@@ -17,7 +17,7 @@ export const MovieDetail = () => {
 
     const {data: movieData, isLoading: movieLoading, error: movieError} = useMovie(id)
     const {data: showtimeReport, isLoading: showtimeLoading, error: showtimeError} = useShowtimeReport(id, user?.role === 'admin')
-    const {data, isLoading, error} = useShowtimes(id)
+    const {data, isLoading, error} = useShowtime(id)
 
     const [form, setForm] = useState<boolean>(false)
 
@@ -31,33 +31,31 @@ export const MovieDetail = () => {
 
     return (
         <>
-            <h1>{movieData.title}</h1>
-            <ul>
-                <li>{movieData.description}</li>
-                <li>{movieData.durationMinutes}</li>
-            </ul>
+            <h1>Title: {movieData[0].movies.title}</h1>
+            <h1>Description: {movieData[0].movies.description}</h1>
+            <h1>Duration: {movieData[0].movies.durationMinutes}</h1>
 
-            {data && data.length > 0 ?
-                data.map(item => (
-                    <div className="border" key={item.showtimes.id}>
-                        <p>{item.showtimes.hall}</p>
-                        <p>Starts at {item.showtimes.startsAt}</p>
-                        <p>total seats: {item.showtimes.totalSeats}</p>
-                        <button onClick={() => navigate(`/showtimes/${item.showtimes.id}`)}>CHECK SEATS</button>
+            {data ?
+                    <div className="border" key={data.id}>
+                        <p>{data.hall}</p>
+                        <p>Starts at {data.startsAt}</p>
+                        <p>total seats: {data.totalSeats}</p>
+                        <button onClick={() => navigate(`/showtimes/${data.id}`)}>CHECK SEATS</button>
                     </div>
-                )) : 'No showtimes available'
+                : 'No showtimes available'
             }
+
             {user?.role === "admin" &&
                 <div className="mt-5">
                     <button className="cursor-pointer border" onClick={() => toggleForm()}>EDIT MOVIE</button>
                     <br/>
-                    <button className="cursor-pointer border text-red-500 mt-5 mb-5" onClick={() => mutate(movieData.id)} disabled={isPending}>
+                    <button className="cursor-pointer border text-red-500 mt-5 mb-5" onClick={() => mutate(id)} disabled={isPending}>
                         REMOVE MOVIE
                     </button>
                     <br/>
 
                     {form &&
-                        <EditMovieForm movie={movieData}/>
+                        <EditMovieForm movie={movieData[0].movies}/>
                     }
 
                 </div>
