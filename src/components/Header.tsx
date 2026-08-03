@@ -22,13 +22,18 @@ export const Header = () => {
                 <li className="ml-5 mr-5"><button className="cursor-pointer" onClick={() => navigate('/movies')}>movies</button></li>
                 <li className="ml-5 mr-5"><button className="cursor-pointer" onClick={() => navigate('/showtimes')}>showtimes</button></li>
 
-                { user &&
+                { user ?
                     <>
                         <li className="ml-5 mr-5"><button className="cursor-pointer" onClick={() => navigate('/reservations')}>reservations</button></li>
                         <span className="ml-5 flex">
                             <li><p>{user.role} - {user.email}</p></li>
                             <li className="ml-5"><button onClick={() => handleLogout()} className="text-red-500">Logout</button></li>
                         </span>
+                    </>
+                    : 
+                    <>
+                        <li className="ml-5 mr-5"><button className="cursor-pointer" onClick={() => navigate('/login')}>login</button></li>
+                        <li className="ml-5 mr-5"><button className="cursor-pointer" onClick={() => navigate('/register')}>register</button></li>
                     </>
                 }
             </ul>
