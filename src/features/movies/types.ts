@@ -10,6 +10,11 @@ export type Movie = {
     genreIds?: string[]
 }
 
+export type MovieSelect = {
+    id: string
+    title: string
+}
+
 export type Genre = {
     id: string
     name: string

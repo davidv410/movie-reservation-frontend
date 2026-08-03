@@ -1,10 +1,10 @@
 import {useCreateShowtime} from "@/features/showtimes/hooks/useCreateShowtime.ts";
-import {useMovies} from "@/features/movies/hooks/useMovies.ts";
+import {useMovieSelect} from "@/features/movies/hooks/useMovieSelect.ts";
 
 export const CreateShowtimeForm = () => {
     const { register, handleSubmit, submitForm, errors, isSubmitting, serverError, successMessage } = useCreateShowtime()
 
-    const { data, isLoading, error } = useMovies()
+    const { data, isLoading, error } = useMovieSelect()
 
     return(
         <>
@@ -15,7 +15,7 @@ export const CreateShowtimeForm = () => {
                 <select {...register('movieId')} className="border">
                     <option value="">--</option>
                     {
-                        (data?.movies ?? []).map(movie => (
+                        (data ?? []).map(movie => (
                             <option key={movie.id} value={movie.id}>{movie.title}</option>
                         ))
                     }
