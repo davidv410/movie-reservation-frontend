@@ -7,6 +7,7 @@ import {EditMovieForm} from "@/features/movies/components/EditMovieForm.tsx";
 import {useState} from "react";
 import {useShowtimeReport} from "@/features/movies/hooks/useShowtimeReport.ts";
 import { useShowtimes } from "@/features/showtimes/hooks/useShowtimes";
+import { formatDateTime } from "@/lib/formatDate";
 
 export const MovieDetail = () => {
     const {id = ''} = useParams()
@@ -24,7 +25,6 @@ export const MovieDetail = () => {
     const toggleForm = () => {
         setForm(!form);
     }
-
     
     if (!movieData) return <p>Movie not found</p>
     if (isLoading || movieLoading) return <p>Loading...</p>
@@ -47,7 +47,7 @@ export const MovieDetail = () => {
                         {data.map(item => (
                             <>
                                 <p>{item.showtimes.hall}</p>
-                                <p>Starts at:{item.showtimes.startsAt}</p>
+                                <p>Starts at: {formatDateTime(item.showtimes.startsAt)}</p>
                                 <p>Seats: {item.showtimes.totalSeats}</p>
                                 <button onClick={() => navigate(`/showtimes/${item.showtimes.id}`)}>CHECK SEATS</button>
                             </>
