@@ -1,4 +1,3 @@
-import {useShowtime} from "@/features/showtimes/hooks/useShowtime.ts";
 import {useParams} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "@/features/auth/context.tsx";
@@ -7,6 +6,7 @@ import {useMovie} from "@/features/movies/hooks/useMovie.ts";
 import {EditMovieForm} from "@/features/movies/components/EditMovieForm.tsx";
 import {useState} from "react";
 import {useShowtimeReport} from "@/features/movies/hooks/useShowtimeReport.ts";
+import { useShowtimes } from "@/features/showtimes/hooks/useShowtimes";
 
 export const MovieDetail = () => {
     const {id = ''} = useParams()
@@ -17,7 +17,7 @@ export const MovieDetail = () => {
 
     const {data: movieData, isLoading: movieLoading, error: movieError} = useMovie(id)
     const {data: showtimeReport, isLoading: showtimeLoading, error: showtimeError} = useShowtimeReport(id, user?.role === 'admin')
-    const {data, isLoading, error} = useShowtime(id)
+    const {data, isLoading, error} = useShowtimes(id)
 
     const [form, setForm] = useState<boolean>(false)
 
@@ -34,18 +34,26 @@ export const MovieDetail = () => {
 
     return (
         <>
-            <h1>Title: {movieData[0].movies.title}</h1>
-            <h1>Description: {movieData[0].movies.description}</h1>
-            <h1>Duration: {movieData[0].movies.durationMinutes}</h1>
 
-            {data ?
-                    <div className="border" key={data.id}>
-                        <p>{data.hall}</p>
-                        <p>Starts at {data.startsAt}</p>
-                        <p>total seats: {data.totalSeats}</p>
-                        <button onClick={() => navigate(`/showtimes/${data.id}`)}>CHECK SEATS</button>
+            <div>
+                <h1>Title: {movieData[0].movies.title}</h1>
+                <p>Description: {movieData[0].movies.description}</p>
+                <p>Duration: {movieData[0].movies.durationMinutes}</p>
+            </div>
+            {
+                data ? 
+                    <div>
+                        SHOWTIMES:
+                        {data.map(item => (
+                            <>
+                                <p>{item.showtimes.hall}</p>
+                                <p>Starts at:{item.showtimes.startsAt}</p>
+                                <p>Seats: {item.showtimes.totalSeats}</p>
+                                <button onClick={() => navigate(`/showtimes/${item.showtimes.id}`)}>CHECK SEATS</button>
+                            </>
+                        ))}
                     </div>
-                : 'No showtimes available'
+                : 'Showtimes not found'
             }
 
             {user?.role === "admin" &&

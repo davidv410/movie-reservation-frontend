@@ -25,7 +25,7 @@ export const useEditMovie = (movie: Movie, genreIds: string[]) => {
             durationMinutes: movie.durationMinutes,
             genreIds: genreIds ?? []
         })
-    }, [movie])
+    }, [movie, genreIds])
 
     const queryClient = useQueryClient();
     const [successMessage, setSuccessMessage] = useState<string | null>(null)
@@ -35,7 +35,6 @@ export const useEditMovie = (movie: Movie, genreIds: string[]) => {
         onSuccess: () => {
             setSuccessMessage("movie updated")
             queryClient.invalidateQueries({ queryKey: ['movie', movie.id] });
-            reset()
         },
         onError: (err) => {
             console.log(err)
