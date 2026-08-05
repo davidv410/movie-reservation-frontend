@@ -4,7 +4,7 @@ import {useState} from "react";
 import {CreateShowtimeForm} from "@/features/showtimes/components/CreateShowtimeForm.tsx"
 import { Header } from "@/components/Header";
 
-export const Homepage = () => {
+export const Admin = () => {
     const { user } = useAuth()
 
     const [movieForm, setMovieForm] = useState(false)

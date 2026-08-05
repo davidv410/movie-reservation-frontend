@@ -1,6 +1,7 @@
 import { useShowtime } from "@/features/showtimes/hooks/useShowtime.ts";
 import { useParams } from "react-router-dom";
 import { Seats } from "@/pages/seats.tsx";
+import { Header } from "@/components/Header";
 
 export const ShowtimeDetail = () => {
     const { id = '' } = useParams()
@@ -13,6 +14,7 @@ export const ShowtimeDetail = () => {
 
     return (
         <>
+            <Header/>
             {data && (
                 <div>
                     <p>{data.id}</p>
