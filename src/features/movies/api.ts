@@ -1,6 +1,6 @@
 import { api } from '@/lib/axios';
 import type {Report, Movie, Genre, MovieSelect, MovieWithGenre } from './types.ts';
-import type {CreateMovieFormData, EditMovieFormData} from "@/features/movies/schema.ts";
+import type {CreateMovieFormData} from "@/features/movies/schema.ts";
 
 export const fetchMovies = async (page?: string, limit?: string, search?: string, genre?: string[]) => {
     const { data } = await api.get<{ movies: Movie[], pages: number[] }>('/movies', { params: { page, limit, search, genre }, paramsSerializer: { indexes: null } })
@@ -32,7 +32,7 @@ export const removeMovie = async (id: string) => {
     return data
 }
 
-export const updateMovie = async ({ id, movieData }: { id: string; movieData: EditMovieFormData }) => {
+export const updateMovie = async ({ id, movieData }: { id: string; movieData: FormData }) => {
     const { data } = await api.patch(`/movies/${id}`, movieData)
     return data
 }
