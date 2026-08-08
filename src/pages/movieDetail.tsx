@@ -9,6 +9,7 @@ import {useShowtimeReport} from "@/features/movies/hooks/useShowtimeReport.ts";
 import { useShowtimes } from "@/features/showtimes/hooks/useShowtimes";
 import { formatDateTime } from "@/lib/formatDate";
 import { Header } from "@/components/Header";
+import { transformMinutes } from "@/utils/transformMinutes";
 
 export const MovieDetail = () => {
     const {id = ''} = useParams()
@@ -39,7 +40,7 @@ export const MovieDetail = () => {
             <div>
                 <h1>Title: {movieData[0].movies.title}</h1>
                 <p>Description: {movieData[0].movies.description}</p>
-                <p>Duration: {movieData[0].movies.durationMinutes}</p>
+                <p>Duration: {transformMinutes(movieData[0].movies.durationMinutes)}</p>
             </div>
             {
                 data ? 

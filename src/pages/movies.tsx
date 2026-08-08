@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useGenres } from "@/features/movies/hooks/useGenres.ts";
 import { Header } from "@/components/Header";
 import { CiSearch } from "react-icons/ci";
+import { transformMinutes } from "@/utils/transformMinutes";
 
 export const Movies = () => {
   const navigate = useNavigate();
@@ -117,7 +118,7 @@ export const Movies = () => {
               <div className="w-100% h-50 bg-amber-400"></div>
               <p>{movie.title}</p>
               <div className="flex justify-between mt-3 mb-3 flex-col">
-                <p>{movie.durationMinutes} min</p>
+                <p>{transformMinutes(movie.durationMinutes)}</p>
                 <button
                   className="cursor-pointer border"
                   onClick={() => navigate(`/movies/${movie.id}`)}
