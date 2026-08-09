@@ -16,14 +16,12 @@ export const ShowtimeDetail = () => {
         <>
             <Header/>
             {data && (
-                <div>
-                    <p>{data.id}</p>
-                </div>
+            <>
+                <section>
+                    <Seats showtimeId={id} movieId={data.movieId}/>
+                </section>
+            </>
             )}
-
-            <section>
-                <Seats showtimeId={id}/>
-            </section>
         </>
     )
 }

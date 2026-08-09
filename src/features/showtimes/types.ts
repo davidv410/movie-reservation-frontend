@@ -35,7 +35,8 @@ export type ShowtimeWithMovie = {
 }
 
 export type SeatsProps = {
-    showtimeId: string
+    showtimeId: string;
+    movieId: string;
 }
 
 export type CreateReservationBody = {
