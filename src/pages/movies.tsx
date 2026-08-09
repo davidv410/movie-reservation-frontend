@@ -115,7 +115,11 @@ export const Movies = () => {
                     w-80
                     "
             >
-              <div className="w-100% h-50 bg-amber-400"></div>
+             <img
+              src={movie.posterUrl!}
+              alt={movie.title}
+              className="w-full h-50 object-cover"
+            />
               <p>{movie.title}</p>
               <div className="flex justify-between mt-3 mb-3 flex-col">
                 <p>{transformMinutes(movie.durationMinutes)}</p>
