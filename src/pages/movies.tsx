@@ -28,9 +28,6 @@ export const Movies = () => {
   const { data, isLoading, error } = useMovies(page, limit, search, genre);
   const { data: genresList } = useGenres();
 
-  // if (isLoading) return <p>Loading...</p>;
-  // if (error) return <p>{error.message}</p>;
-
   return (
     <>
       <Header />
@@ -61,54 +58,62 @@ export const Movies = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap w-full justify-center">
-          {(data?.movies ?? []).map((movie) => (
-            <div
-              key={movie.id}
-              className="
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>{error.message}</p>
+        ) : (
+          <>
+            <div className="flex flex-wrap w-full justify-center">
+              {(data?.movies ?? []).map((movie) => (
+                <div
+                  key={movie.id}
+                  className="
                     m-10
                     p-2
                     border
                     w-80
                     "
-            >
-             <img
-              src={movie.posterUrl!}
-              alt={movie.title}
-              className="w-full h-50 object-cover"
-            />
-              <p>{movie.title}</p>
-              <div className="flex justify-between mt-3 mb-3 flex-col">
-                <p>{transformMinutes(movie.durationMinutes)}</p>
-                <button
-                  className="cursor-pointer border"
-                  onClick={() => navigate(`/movies/${movie.id}`)}
                 >
-                  WATCH
-                </button>
-              </div>
+                  <img
+                    src={movie.posterUrl!}
+                    alt={movie.title}
+                    className="w-full h-50 object-cover"
+                  />
+                  <p>{movie.title}</p>
+                  <div className="flex justify-between mt-3 mb-3 flex-col">
+                    <p>{transformMinutes(movie.durationMinutes)}</p>
+                    <button
+                      className="cursor-pointer border"
+                      onClick={() => navigate(`/movies/${movie.id}`)}
+                    >
+                      WATCH
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div className="w-full flex justify-center">
-          {(data?.pages ?? []).map((p) => (
-            <ul>
-              <li
-                className="m-3 cursor-pointer w-2"
-                onClick={() =>
-                  setSearchParams({
-                    page: String(p),
-                    limit: limit,
-                    search: search,
-                    genre: genresArr,
-                  })
-                }
-              >
-                {p}
-              </li>
-            </ul>
-          ))}
-        </div>
+            <div className="w-full flex justify-center">
+              {(data?.pages ?? []).map((p) => (
+                <ul>
+                  <li
+                    className="m-3 cursor-pointer w-2"
+                    onClick={() =>
+                      setSearchParams({
+                        page: String(p),
+                        limit: limit,
+                        search: search,
+                        genre: genresArr,
+                      })
+                    }
+                  >
+                    {p}
+                  </li>
+                </ul>
+              ))}
+            </div>
+          </>
+        )}
       </section>
     </>
   );
