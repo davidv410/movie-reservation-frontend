@@ -79,6 +79,7 @@ export const Movies = () => {
                     src={movie.posterUrl!}
                     alt={movie.title}
                     className="w-full h-50 object-cover"
+                    loading="lazy"
                   />
                   <p>{movie.title}</p>
                   <div className="flex justify-between mt-3 mb-3 flex-col">
