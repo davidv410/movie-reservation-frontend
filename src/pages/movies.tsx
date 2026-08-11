@@ -1,9 +1,8 @@
 import { useMovies } from "@/features/movies/hooks/useMovies.ts";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useGenres } from "@/features/movies/hooks/useGenres.ts";
 import { Header } from "@/components/Header";
-import { CiSearch } from "react-icons/ci";
 import { transformMinutes } from "@/utils/transformMinutes";
 
 export const Movies = () => {
@@ -15,18 +14,6 @@ export const Movies = () => {
   const limit = searchParams.get("limit") ?? "5";
   const search = searchParams.get("search") ?? "";
   const genre = searchParams.getAll("genre") ?? [];
-
-  const [searchInput, setSearchInput] = useState<string>("");
-
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
-  };
-
-  const [limitSelect, setLimitSelect] = useState<string>("5");
-
-  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setLimitSelect(e.target.value);
-  };
 
   const [genresArr, setGenresArr] = useState<string[]>([]);
 
@@ -41,44 +28,14 @@ export const Movies = () => {
   const { data, isLoading, error } = useMovies(page, limit, search, genre);
   const { data: genresList } = useGenres();
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>{error.message}</p>;
+  // if (isLoading) return <p>Loading...</p>;
+  // if (error) return <p>{error.message}</p>;
 
   return (
     <>
       <Header />
       <section>
         <div className="">
-          <input
-            className="border rounded-l-xl pl-1"
-            placeholder="search..."
-            onChange={handleInput}
-            value={searchInput}
-          ></input>
-          <select
-            className="border w-10 cursor-pointer"
-            value={limitSelect}
-            onChange={handleSelect}
-          >
-            <option disabled={true}>Change limit</option>
-            <option>5</option>
-            <option>10</option>
-            <option>15</option>
-            <option>20</option>
-          </select>
-          <button
-            className="cursor-pointer ml-5 mb-5"
-            onClick={() =>
-              setSearchParams({
-                page: "1",
-                limit: limitSelect,
-                search: searchInput,
-                genre: genresArr,
-              })
-            }
-          >
-            <CiSearch size={20} />
-          </button>
           <div>
             {(genresList ?? []).map((g) => (
               <button
@@ -93,8 +50,8 @@ export const Movies = () => {
               onClick={() =>
                 setSearchParams({
                   page: "1",
-                  limit: limitSelect,
-                  search: searchInput,
+                  limit: limit,
+                  search: search,
                   genre: genresArr,
                 })
               }
@@ -141,8 +98,8 @@ export const Movies = () => {
                 onClick={() =>
                   setSearchParams({
                     page: String(p),
-                    limit: limitSelect,
-                    search: searchInput,
+                    limit: limit,
+                    search: search,
                     genre: genresArr,
                   })
                 }
