@@ -1,6 +1,7 @@
 import { useAuth } from "@/features/auth/context.tsx";
 import { logoutUser } from "@/features/auth/api.ts";
 import {useNavigate} from "react-router-dom";
+import { Search } from "./Search";
 
 export const Header = () => {
 
@@ -20,6 +21,7 @@ export const Header = () => {
                 <span className="flex">
                     <li className="ml-5 mr-5"><button className="cursor-pointer" onClick={() => navigate('/')}>home</button></li>
                     <li className="ml-5 mr-5"><button className="cursor-pointer" onClick={() => navigate('/showtimes')}>showtimes</button></li>
+                    <Search/>
                 </span>
 
                 <span className="flex">
