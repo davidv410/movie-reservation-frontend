@@ -16,9 +16,9 @@ export const Header = () => {
     }
 
     return(
-        <>
+        <header className="bg-stone-950 text-white">
             <ul className="flex w-full justify-between items-center mb-10 h-fit pt-5 pb-5 flex-wrap">
-                <span className="flex">
+                <span className="flex items-center">
                     <li className="ml-5 mr-5"><button className="cursor-pointer" onClick={() => navigate('/')}>home</button></li>
                     <li className="ml-5 mr-5"><button className="cursor-pointer" onClick={() => navigate('/showtimes')}>showtimes</button></li>
                     <Search/>
@@ -42,6 +42,6 @@ export const Header = () => {
                 }
                 </span>
             </ul>
-        </>
+        </header>
     )
 }

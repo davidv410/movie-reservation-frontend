@@ -21,15 +21,15 @@ export const Search = () => {
 
   return (
     <>
-      <div className="">
+      <div className="flex items-center">
         <input
-          className="border rounded-l-xl pl-1"
+          className="border rounded-l-xl pl-3 w-30"
           placeholder="search..."
           onChange={handleInput}
           value={searchInput}
         ></input>
         <select
-          className="border w-10 cursor-pointer"
+          className="border w-10 cursor-pointer pt-[1.5px] pb-[1.5px] pl-1.5 rounded-r-xl"
           value={limitSelect}
           onChange={handleSelect}
         >
@@ -39,8 +39,9 @@ export const Search = () => {
           <option>15</option>
           <option>20</option>
         </select>
-        <button
-          className="cursor-pointer ml-5 mb-5"
+        <CiSearch
+          className="ml-2 cursor-pointer"
+          size={25}
           onClick={() =>
             setSearchParams({
               page: "1",
@@ -49,9 +50,7 @@ export const Search = () => {
               genre: genre,
             })
           }
-        >
-          <CiSearch size={20} />
-        </button>
+        />
       </div>
     </>
   );

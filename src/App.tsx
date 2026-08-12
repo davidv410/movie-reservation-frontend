@@ -13,7 +13,7 @@ function App() {
 
   return (
     <>
-        <main className='ml-5 mr-5'>
+        <main>
             <Routes>
                 <Route path="/" element={<Movies />} />
                 <Route path="/movies/:id" element={<MovieDetail />} />
