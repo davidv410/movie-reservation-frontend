@@ -14,7 +14,9 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
 
     const [selectedSeats, setSelectedSeats] = useState<seatType[]>([])
 
-    const { mutate } = useCreateReservation(showtimeId)
+    const [submitting, setSubmitting] = useState(false)
+
+    const { mutateAsync } = useCreateReservation(showtimeId)
 
     const { data, isLoading, error } = useSeats(showtimeId)
 
@@ -24,20 +26,19 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
         setSelectedSeats(prev => prev.some(s => s.id === seat.id) ? prev.filter(s => s.id !== seat.id) : [...prev, seat])
     }
 
-    const confirmSeatReservation = () => {
+    const confirmSeatReservation = async () => {
         if(selectedSeats.length === 0){ return console.log("no seats selected") }
-        selectedSeats.forEach(seat => {
-            mutate({ showtimeId, seatId: seat.id }, {
-                onSuccess: (data) => {
-                    console.log('Reservation created:', data)
-                },
-                onError: (err) => {
-                    console.log('Failed:', err)
-                }
-            })
-        })
-        console.log('seat reservation created')
-    }
+        setSubmitting(true)
+        try{
+            const result = await Promise.allSettled(
+                selectedSeats.map(seat => mutateAsync({ showtimeId, seatId: seat.id }))
+            )
+            console.log(result)
+        }finally{
+            setSubmitting(false)
+            setSelectedSeats([])
+        }
+    }    
 
     if(isLoading) return <p>Loading...</p>
     if(error) return <p>{error.message}</p>
@@ -78,7 +79,7 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
                     <p>{seat.row}-{seat.number}</p>
                 </div>
             ))}
-            <button onClick={confirmSeatReservation} className="cursor-pointer">confirm bookings</button>
+            <button onClick={confirmSeatReservation} className="cursor-pointer" disabled={submitting} >confirm bookings</button>
         </>
     )
 }
