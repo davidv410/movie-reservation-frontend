@@ -21,7 +21,11 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/showtimes" element={<Showtimes />} />
                 <Route path="/showtimes/:id" element={<ShowtimeDetail />} />
-                <Route path="/admin" element={<Admin />} />
+                <Route path="/admin" element={
+                    <ProtectedRoute>
+                        <Admin />
+                    </ProtectedRoute>
+                } />
                 <Route path="/reservations" element={
                     <ProtectedRoute>
                         <Reservations />
