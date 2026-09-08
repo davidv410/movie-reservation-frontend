@@ -14,6 +14,8 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
 
     const [selectedSeats, setSelectedSeats] = useState<seatType[]>([])
 
+    const [failedSeats, setFailedSeats] = useState<{ seatId: string, err: any }[]>([])
+
     const [submitting, setSubmitting] = useState(false)
 
     const { mutateAsync } = useCreateReservation(showtimeId)
@@ -24,6 +26,7 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
 
     const addSeats = (seat: seatType) => {
         setSelectedSeats(prev => prev.some(s => s.id === seat.id) ? prev.filter(s => s.id !== seat.id) : [...prev, seat])
+        setFailedSeats([])
     }
 
     const confirmSeatReservation = async () => {
@@ -31,9 +34,13 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
         setSubmitting(true)
         try{
             const result = await Promise.allSettled(
-                selectedSeats.map(seat => mutateAsync({ showtimeId, seatId: seat.id }))
+                selectedSeats.map(seat => mutateAsync({ showtimeId, seatId: seat.id })
+                .then(res => ({ seatId: seat.id, res }))
+                .catch(err => { throw { seatId: seat.id, err }})
             )
-            console.log(result)
+            )
+            const failed = result.filter(r => r.status === 'rejected').map(r => r.reason)
+            setFailedSeats(failed)
         }finally{
             setSubmitting(false)
             setSelectedSeats([])
@@ -80,6 +87,13 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
                 </div>
             ))}
             <button onClick={confirmSeatReservation} className="cursor-pointer" disabled={submitting} >confirm bookings</button>
+
+            {failedSeats.length > 0 && (
+            <div className="text-red-500 text-sm mt-2">
+                Couldn't book seat
+                {failedSeats.map(f => f.seatId)}
+            </div>
+            )}
         </>
     )
 }
