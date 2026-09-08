@@ -4,7 +4,7 @@ React + TypeScript frontend for booking movie tickets. Browse movies and showtim
 
 ## About this project
 
-Most seat-booking demos never actually test what happens when two people try to grab the same seat. The backend for this one handles that properly (row locking + a unique index as backup — see that repo's README), so this frontend is built around that reality too, including showing the user when a seat they picked gets taken by someone else before they confirm.
+Most seat-booking demos don't handle what happens when two people go for the same seat at the same time. The backend deals with that (row locking, plus a unique index as a backup), so I built the frontend accordingly, if a seat you picked gets taken before you confirm, you'll see it.
 
 ## Features
 
@@ -13,7 +13,7 @@ Most seat-booking demos never actually test what happens when two people try to 
 - Browse movies, movie details, showtimes per movie
 - Seat map per showtime, select multiple seats, book them
 - View and cancel your own reservations
-- Admin panel — create/edit movies and showtimes
+- Admin panel: create/edit movies and showtimes
 
 ## Stack
 
@@ -48,7 +48,11 @@ npm run dev
 
 Runs at `localhost:5173`.
 
-Note: the API url is hardcoded in `src/lib/axios.ts` right now, if your backend's on a different port change it there. Should probably be an env var, on my list below.
+Make a `.env` file with:
+
+```env
+VITE_API_URL=
+```
 
 ## Still to do
 
