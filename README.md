@@ -1,32 +1,59 @@
-# React + TypeScript + Vite
+# Movie Reservation - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React + TypeScript frontend for booking movie tickets. Browse movies and showtimes, pick seats on a seat map, manage your bookings. Backend API: (https://github.com/davidv410/movie-reservation-ts).
 
-Currently, two official plugins are available:
+## About this project
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Most seat-booking demos never actually test what happens when two people try to grab the same seat. The backend for this one handles that properly (row locking + a unique index as backup — see that repo's README), so this frontend is built around that reality too, including showing the user when a seat they picked gets taken by someone else before they confirm.
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Register/login, JWT stored and refreshed automatically via an axios interceptor
+- Protected routes for logged-in stuff and admin-only stuff
+- Browse movies, movie details, showtimes per movie
+- Seat map per showtime, select multiple seats, book them
+- View and cancel your own reservations
+- Admin panel — create/edit movies and showtimes
 
-## Expanding the Oxlint configuration
+## Stack
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+React, TypeScript, Vite, TanStack Query, React Hook Form + Zod, Tailwind v4, React Router, Axios.
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+## Folder structure
+
+Split by feature instead of by type, each one has its own api calls/hooks/types:
+
+```
+src/
+├── features/
+│   ├── auth/
+│   ├── movies/
+│   ├── showtimes/
+│   └── reservations/
+├── pages/
+├── components/
+└── lib/
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Running it
+
+Need the [backend](https://github.com/davidv410/movie-reservation-ts) running first (defaults to `localhost:5000`).
+
+```bash
+git clone https://github.com/davidv410/movie-reservation-frontend.git
+cd movie-reservation-frontend
+npm install
+npm run dev
+```
+
+Runs at `localhost:5173`.
+
+Note: the API url is hardcoded in `src/lib/axios.ts` right now, if your backend's on a different port change it there. Should probably be an env var, on my list below.
+
+## Still to do
+
+- Seat holds with a countdown timer instead of instant book
+- Stripe checkout
+- Tests
+- Deploy it somewhere
+- Make UI more appealing
