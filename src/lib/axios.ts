@@ -10,9 +10,10 @@ export const publicApi = axios.create({
     withCredentials: true,
 });
 
+let refreshInProgress: Promise<void> | null = null;
+
 api.interceptors.response.use(
   (response) => response,
-
   async (error) => {
     const failedRequest = error.config;
 
@@ -23,8 +24,12 @@ api.interceptors.response.use(
     failedRequest.alreadyRetried = true;
 
     try {
-        await publicApi.post("/auth/refresh");
-        return api(failedRequest);
+      if(!refreshInProgress){
+        refreshInProgress = publicApi.post("/auth/refresh").then(() => undefined).finally(() => { refreshInProgress = null })
+      }
+      
+      await refreshInProgress;
+      return api(failedRequest);
     } catch {
         if (window.location.pathname !== "/login") {
         window.location.href = "/login";
