@@ -8,6 +8,7 @@ export const useCreateReservation = (showtimeId: string) => {
         mutationFn: createReservation,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['seats', showtimeId] })
+            queryClient.invalidateQueries({ queryKey: ['reservations'] })
         }
     })
 }
