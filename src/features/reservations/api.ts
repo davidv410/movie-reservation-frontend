@@ -1,9 +1,9 @@
 import { api } from "@/lib/axios.ts";
-import type {ReservationWithSeat} from "@/features/reservations/types.ts";
+import type {ReservationsInfo} from "@/features/reservations/types.ts";
 
 
 export const fetchReservations = async () => {
-    const { data } = await api.get<{ reservations: ReservationWithSeat[] }>('/reservations');
+    const { data } = await api.get<{ reservations: ReservationsInfo[] }>('/reservations');
     return data.reservations ?? [];
 }
 
