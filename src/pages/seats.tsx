@@ -14,7 +14,8 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
 
     const [selectedSeats, setSelectedSeats] = useState<seatType[]>([])
 
-    const [failedSeats, setFailedSeats] = useState<{ seatId: string, err: any }[]>([])
+    const [failedSeats, setFailedSeats] = useState<{ seatId: string, seatLabel: string, err: any }[]>([])
+    const [successSeats, setSuccessSeats] = useState<{ seatId: string, seatLabel: string, res: any }[]>([])
 
     const [submitting, setSubmitting] = useState(false)
 
@@ -27,6 +28,7 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
     const addSeats = (seat: seatType) => {
         setSelectedSeats(prev => prev.some(s => s.id === seat.id) ? prev.filter(s => s.id !== seat.id) : [...prev, seat])
         setFailedSeats([])
+        setSuccessSeats([])
     }
 
     const confirmSeatReservation = async () => {
@@ -35,10 +37,12 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
         try{
             const result = await Promise.allSettled(
                 selectedSeats.map(seat => mutateAsync({ showtimeId, seatId: seat.id })
-                .then(res => ({ seatId: seat.id, res }))
-                .catch(err => { throw { seatId: seat.id, err }})
+                .then(res => ({ seatId: seat.id, seatLabel: `${seat.row}-${seat.number}`, res }))
+                .catch(err => { throw { seatId: seat.id, seatLabel: `${seat.row}-${seat.number}`, err }})
             )
             )
+            const success = result.filter(r => r.status === "fulfilled").map(r => r.value)
+            setSuccessSeats(success)
             const failed = result.filter(r => r.status === 'rejected').map(r => r.reason)
             setFailedSeats(failed)
         }finally{
@@ -51,9 +55,42 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
     if(error) return <p>{error.message}</p>
 
     return (
-        <>
-            <section className="">
+      <>
+      {
+        selectedSeats.length > 0 ? 
+        (<div>
+        {selectedSeats.map((seat) => (
+          <div className="border">
+            <p>
+              {seat.row}-{seat.number}
+            </p>
+          </div>
+        ))}
+        <button
+          onClick={confirmSeatReservation}
+          className="cursor-pointer"
+          disabled={submitting}
+        >
+          confirm bookings
+        </button> 
+        </div>): null}
 
+        <div>
+        {failedSeats.length > 0  && (
+          <div className="text-red-500 text-sm mt-2">
+            Couldn't book seat
+            {failedSeats.map((f) => f.seatLabel)}
+          </div>
+        )}
+        {successSeats.length > 0  && (
+          <div className="text-green-400 text-sm mt-2">
+            Seats successfully booked:
+            {successSeats.map((s) => s.seatLabel)}
+          </div>
+        )}
+        </div>
+
+        <section className="">
                 <div>
                     {movie &&
                         <p>{movie[0].movies.title}</p>
@@ -80,20 +117,6 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
                 ))}
                 </div>
             </section>
-            {selectedSeats.map(seat => (
-                <div className="border">
-                    <p>{seat.id}</p>
-                    <p>{seat.row}-{seat.number}</p>
-                </div>
-            ))}
-            <button onClick={confirmSeatReservation} className="cursor-pointer" disabled={submitting} >confirm bookings</button>
-
-            {failedSeats.length > 0 && (
-            <div className="text-red-500 text-sm mt-2">
-                Couldn't book seat
-                {failedSeats.map(f => f.seatId)}
-            </div>
-            )}
-        </>
-    )
+      </>
+    );
 }
