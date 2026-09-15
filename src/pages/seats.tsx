@@ -14,9 +14,8 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
 
     const [selectedSeats, setSelectedSeats] = useState<seatType[]>([])
 
-    const [failedSeats, setFailedSeats] = useState<{ seatId: string, seatLabel: string, err: any }[]>([])
-    const [successSeats, setSuccessSeats] = useState<{ seatId: string, seatLabel: string, res: any }[]>([])
-
+    const [failedSeats, setFailedSeats] = useState<string | null>(null)
+    const [successSeats, setSuccessSeats] = useState<string | null>(null)
     const [submitting, setSubmitting] = useState(false)
 
     const { mutateAsync } = useCreateReservation(showtimeId)
@@ -27,27 +26,24 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
 
     const addSeats = (seat: seatType) => {
         setSelectedSeats(prev => prev.some(s => s.id === seat.id) ? prev.filter(s => s.id !== seat.id) : [...prev, seat])
-        setFailedSeats([])
-        setSuccessSeats([])
+        setFailedSeats(null)
+        setSuccessSeats(null)
     }
 
     const confirmSeatReservation = async () => {
         if(selectedSeats.length === 0){ return console.log("no seats selected") }
         setSubmitting(true)
-        try{
-            const result = await Promise.allSettled(
-                selectedSeats.map(seat => mutateAsync({ showtimeId, seatId: seat.id })
-                .then(res => ({ seatId: seat.id, seatLabel: `${seat.row}-${seat.number}`, res }))
-                .catch(err => { throw { seatId: seat.id, seatLabel: `${seat.row}-${seat.number}`, err }})
-            )
-            )
-            const success = result.filter(r => r.status === "fulfilled").map(r => r.value)
-            setSuccessSeats(success)
-            const failed = result.filter(r => r.status === 'rejected').map(r => r.reason)
-            setFailedSeats(failed)
-        }finally{
-            setSubmitting(false)
-            setSelectedSeats([])
+        try {
+          await mutateAsync({
+            showtimeId,
+            seatIds: selectedSeats.map((s) => s.id),
+          });
+          setSuccessSeats('Booking successful')
+        } catch (err) {
+          setFailedSeats('Booking failed')
+        } finally {
+          setSubmitting(false)
+          setSelectedSeats([])
         }
     }    
 
@@ -76,16 +72,14 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
         </div>): null}
 
         <div>
-        {failedSeats.length > 0  && (
+        {failedSeats && (
           <div className="text-red-500 text-sm mt-2">
-            Couldn't book seat
-            {failedSeats.map((f) => f.seatLabel)}
+            {failedSeats}
           </div>
         )}
-        {successSeats.length > 0  && (
+        {successSeats && (
           <div className="text-green-400 text-sm mt-2">
-            Seats successfully booked:
-            {successSeats.map((s) => s.seatLabel)}
+            {successSeats}
           </div>
         )}
         </div>
