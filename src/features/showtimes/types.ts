@@ -41,7 +41,7 @@ export type SeatsProps = {
 
 export type CreateReservationBody = {
     showtimeId: string;
-    seatId: string;
+    seatIds: string[];
 }
 
 export type ReservationResponse = {
