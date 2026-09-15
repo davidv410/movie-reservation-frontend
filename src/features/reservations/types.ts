@@ -9,15 +9,19 @@ export type Reservation = {
     cancelledAt: string | null;
 }
 
-export type ReservationWithSeat = {
-    reservations: Reservation
-    seats: {
-        id: string;
-        showtimeId: string;
-        row: string;
-        number: number;
-        type: string;
-        price: string;
-        isAvailable: boolean;
-    }
+export type ReservationsInfo = {
+    reservationId: string,
+    reservationStatus: string,
+    seatRow: string,
+    seatNumber: number,
+    seatPrice: number,
+    seatIsAvailable: boolean,
+    showtimeId: string,
+
+    startTime: string,
+
+    movieTitle: string,
+    userId: string,
+    userName: string,
+    userEmail: string,
 }
