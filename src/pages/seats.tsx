@@ -4,6 +4,11 @@ import {useState} from "react";
 import {useCreateReservation} from "@/features/showtimes/hooks/useCreateReservation.ts";
 import { useMovie } from "@/features/movies/hooks/useMovie";
 
+import { Elements } from "@stripe/react-stripe-js";
+import { stripePromise } from "@/lib/stripe";
+import { CheckoutForm } from "@/features/reservations/components/CheckoutForm";
+
+
 export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
 
     type seatType = {
@@ -14,9 +19,10 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
 
     const [selectedSeats, setSelectedSeats] = useState<seatType[]>([])
 
-    const [failedSeats, setFailedSeats] = useState<string | null>(null)
-    const [successSeats, setSuccessSeats] = useState<string | null>(null)
+    const [seatsNotAvailable, setSeatsNotAvailable] = useState<boolean>(false)
     const [submitting, setSubmitting] = useState(false)
+
+    const [clientSecret, setClientSecret] = useState<string | null>(null);
 
     const { mutateAsync } = useCreateReservation(showtimeId)
 
@@ -26,21 +32,20 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
 
     const addSeats = (seat: seatType) => {
         setSelectedSeats(prev => prev.some(s => s.id === seat.id) ? prev.filter(s => s.id !== seat.id) : [...prev, seat])
-        setFailedSeats(null)
-        setSuccessSeats(null)
+        setSeatsNotAvailable(false)
     }
 
     const confirmSeatReservation = async () => {
         if(selectedSeats.length === 0){ return console.log("no seats selected") }
         setSubmitting(true)
         try {
-          await mutateAsync({
+          const result = await mutateAsync({
             showtimeId,
             seatIds: selectedSeats.map((s) => s.id),
           });
-          setSuccessSeats('Booking successful')
+          setClientSecret(result.clientSecret);
         } catch (err) {
-          setFailedSeats('Booking failed')
+          setSeatsNotAvailable(true)
         } finally {
           setSubmitting(false)
           setSelectedSeats([])
@@ -69,20 +74,23 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
         >
           confirm bookings
         </button> 
-        </div>): null}
+        </div>)
+      : 
+      null}
 
         <div>
-        {failedSeats && (
+        {seatsNotAvailable ?? (
           <div className="text-red-500 text-sm mt-2">
-            {failedSeats}
-          </div>
-        )}
-        {successSeats && (
-          <div className="text-green-400 text-sm mt-2">
-            {successSeats}
+            <p>Seat/Seats not available</p>
           </div>
         )}
         </div>
+
+        {clientSecret && (
+            <Elements stripe={stripePromise} options={{ clientSecret }}>
+                <CheckoutForm />
+            </Elements>
+        )}
 
         <section className="">
                 <div>
