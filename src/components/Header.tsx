@@ -17,6 +17,7 @@ export const Header = () => {
 
     return(
         <header className="bg-stone-950 text-white">
+            <div className="relative bg-red-500">JUST A DEMO, IF YOU ARE INTERESTED IN MY CSS WORK CHECK OUT: <a href="https://www.konobaivinaarka.com/">konobaivinaarka.com</a></div>
             <ul className="flex w-full justify-between items-center mb-10 h-fit pt-5 pb-5 flex-wrap">
                 <span className="flex items-center">
                     <li className="ml-5 mr-5"><button className="cursor-pointer" onClick={() => navigate('/')}>home</button></li>
