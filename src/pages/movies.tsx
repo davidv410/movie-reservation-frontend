@@ -108,7 +108,9 @@ export const Movies = () => {
                       })
                     }
                   >
-                    {p}
+                    {
+                      p == parseInt(page) ? <p className="text-green-500">{p}</p> : <p>{p}</p> 
+                    }
                   </li>
                 </ul>
               ))}
