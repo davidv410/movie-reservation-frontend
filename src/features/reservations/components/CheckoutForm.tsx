@@ -28,10 +28,10 @@ export const CheckoutForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="mb-5">
             <PaymentElement />
             {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-            <button type="submit" disabled={!stripe || submitting}>
+            <button type="submit" disabled={!stripe || submitting} className="border-2 bg-amber-300 w-full cursor-pointer">
                 {submitting ? "Processing..." : "Pay now"}
             </button>
         </form>

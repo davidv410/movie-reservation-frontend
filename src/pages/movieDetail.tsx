@@ -44,14 +44,14 @@ export const MovieDetail = () => {
             </div>
             {
                 data ? 
-                    <div>
+                    <div className="border-2">
                         SHOWTIMES:
                         {data.map(item => (
                             <>
                                 <p>{item.showtimes.hall}</p>
                                 <p>Starts at: {formatDateTime(item.showtimes.startsAt)}</p>
                                 <p>Seats: {item.showtimes.totalSeats}</p>
-                                <button onClick={() => navigate(`/showtimes/${item.showtimes.id}`)}>CHECK SEATS</button>
+                                <button className="cursor-pointer border-2" onClick={() => navigate(`/showtimes/${item.showtimes.id}`)}>CHECK SEATS</button>
                             </>
                         ))}
                     </div>

@@ -36,14 +36,15 @@ export const Movies = () => {
           <div>
             {(genresList ?? []).map((g) => (
               <button
-                className={`border mr-1 cursor-pointer rounded-xl pl-1.5 pr-1.5 ${genresArr.includes(g.id) ? "text-red-500" : ""}`}
+                key={g.id}
+                className={`border-2 mr-1 cursor-pointer pl-1.5 pr-1.5 ${genresArr.includes(g.id) ? "text-red-500" : ""}`}
                 onClick={() => addGenres(g.id)}
               >
                 {g.slug}
               </button>
             ))}
             <button
-              className="border cursor-pointer text-green-500"
+              className="border-2 cursor-pointer text-green-500"
               onClick={() =>
                 setSearchParams({
                   page: "1",
@@ -98,6 +99,7 @@ export const Movies = () => {
               {(data?.pages ?? []).map((p) => (
                 <ul>
                   <li
+                    key={p}
                     className="m-3 cursor-pointer w-2"
                     onClick={() =>
                       setSearchParams({
