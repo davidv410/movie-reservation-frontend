@@ -69,7 +69,7 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
         ))}
         <button
           onClick={confirmSeatReservation}
-          className="cursor-pointer"
+          className="cursor-pointer border-2 bg-amber-300"
           disabled={submitting}
         >
           confirm bookings
@@ -101,7 +101,7 @@ export const Seats = ({ showtimeId, movieId }: SeatsProps) => {
       
                 <div className="flex flex-wrap">
                 {(data ?? []).map(seat => (
-                    <div key={seat.id} className="m-2">
+                    <div key={seat.id} className={`m-2 ${selectedSeats.some(s => s.id === seat.id) ? 'border-2 text-amber-400' : ''}`}>
                         <p>{seat.row}</p>
                         <p>{seat.number}</p>
                         <p>{seat.price}</p>
