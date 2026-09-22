@@ -16,9 +16,13 @@ export const Header = () => {
     }
 
     return(
-        <header className="bg-stone-950 text-white">
-            <div className="relative bg-red-500">JUST A DEMO, IF YOU ARE INTERESTED IN MY CSS WORK CHECK OUT: <a href="https://www.konobaivinaarka.com/">konobaivinaarka.com</a></div>
-            <ul className="flex w-full justify-between items-center mb-10 h-fit pt-5 pb-5 flex-wrap">
+        <header className="border-2 mb-10">
+            <div className="relative bg-amber-300 text-black">
+                JUST A DEMO, IF YOU ARE INTERESTED IN MY CSS WORK CHECK OUT: 
+                <a href="https://www.konobaivinaarka.com/" target="_blank">konobaivinaarka.com</a><br/>
+                workers are currently disabled because i accidentally ran out of limit (email, cleanup of abandoned reservations/payments)
+            </div>
+            <ul className="flex w-full justify-between items-center h-fit pt-5 pb-5 flex-wrap">
                 <span className="flex items-center">
                     <li className="ml-5 mr-5"><button className="cursor-pointer" onClick={() => navigate('/')}>home</button></li>
                     <li className="ml-5 mr-5"><button className="cursor-pointer" onClick={() => navigate('/showtimes')}>showtimes</button></li>
@@ -29,7 +33,9 @@ export const Header = () => {
                 { user ?
                     <>
                         <li className="ml-5 mr-5"><button className="cursor-pointer" onClick={() => navigate('/reservations')}>reservations</button></li>
+                        { user.role === 'admin' && 
                         <li className="ml-5 mr-5"><button className="cursor-pointer" onClick={() => navigate('/admin')}>{user.role}</button></li>
+                        }
                         <span className="ml-5 flex">
                             <li>{user.email}</li>
                             <li className="ml-5 mr-5"><button onClick={() => handleLogout()} className="text-red-500">Logout</button></li>
